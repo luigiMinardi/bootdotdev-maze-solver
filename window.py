@@ -1,12 +1,14 @@
 from tkinter import Tk, BOTH, Canvas
 
+from line import Line
+
 
 class Window:
+    """
+    width and height are the size of the new window in pixels.
+    title is the self.__root title.
+    """
     def __init__(self, width: int, height: int, title: str) -> None:
-        """
-        width and height are the size of the new window in pixels.
-        title is the self.__root title.
-        """
         self.__root = Tk()
         self.__root.title(title)
         self.__root.protocol("WM_DELETE_WINDOW", self.close)
@@ -41,5 +43,15 @@ class Window:
         set self.__is_window_running to False
         """
         self.__is_window_running = False
+
+
+    def draw_line(self, line: Line, fill_color: str) -> None:
+        """
+        Draw a line between two Point's in a Canvas.
+
+        line: Line class
+        fill_color: TK Color (name of the color or HEX #rrggbb value)
+        """
+        line.draw(self.__canvas, fill_color)
 
 
