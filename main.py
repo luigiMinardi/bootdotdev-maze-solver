@@ -1,10 +1,16 @@
+from cell import Cell
 from line import Line
 from point import Point
 from window import Window
 
 
 def main():
+    """
+    x=0 is the left of the screen.
+    y=0 is the top of the screen.
+    """
     win = Window(800, 600, "Beautiful window")
+    '''
     point_A = Point(10,100)
     point_B = Point(100,10)
     line = Line(point_A, point_B)
@@ -13,6 +19,22 @@ def main():
     line2 = Line(point_C, point_D)
     win.draw_line(line, "#232136")
     win.draw_line(line2, "#232136")
+    '''
+
+    cell1 = Cell(win, 10, 10, 20, 20)
+    cell1.has_top_wall = False
+    cell1.has_right_wall = False
+    cell2 = Cell(win, 10, 20, 20, 30)
+    cell2.has_left_wall = False
+    cell2.has_bottom_wall = False
+    cell3 = Cell(win, 301, 302, 400, 400)
+    cell4 = Cell(win, 30, 40, 40, 50)
+    cell4.has_top_wall = False
+    cell1.draw()
+    cell2.draw()
+    cell3.draw()
+    cell4.draw()
+
     win.wait_for_close()
 
 

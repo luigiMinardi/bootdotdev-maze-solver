@@ -45,7 +45,7 @@ class Window:
         self.__is_window_running = False
 
 
-    def draw_line(self, line: Line, fill_color: str) -> None:
+    def draw_line(self, line: Line, fill_color: str = "#232136") -> None:
         """
         Draw a line between two Point's in a Canvas.
 

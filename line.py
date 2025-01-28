@@ -1,4 +1,3 @@
-
 from tkinter import Canvas
 from point import Point
 
@@ -11,7 +10,7 @@ class Line:
         self.point_A = point_A
         self.point_B = point_B
 
-    def draw(self, canvas: Canvas, fill_color: str) -> None:
+    def draw(self, canvas: Canvas, fill_color: str = "#232136") -> None:
         """
         Draw a line between two Point's in a Canvas.
 
