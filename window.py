@@ -17,7 +17,7 @@ class Window:
         self.__is_window_running = False
 
 
-    def redraw(self):
+    def redraw(self) -> None:
         """
         call self.__root.update_idletasks() and self.__root.update()
         to redraw the screen.
@@ -26,17 +26,20 @@ class Window:
         self.__root.update()
     
 
-    def wait_for_close(self):
+    def wait_for_close(self) -> None:
         """
-        set self.data["is_window_running"] to True
-        call self.redraw() until "is_window_running" is False
+        set self.__is_window_running to True
+        call self.redraw() until self.__is_window_running is False
         """
         self.__is_window_running = True
         while self.__is_window_running is True:
             self.redraw()
 
 
-    def close(self):
+    def close(self) -> None:
+        """
+        set self.__is_window_running to False
+        """
         self.__is_window_running = False
 
 
