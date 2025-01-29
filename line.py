@@ -26,3 +26,8 @@ class Line:
             width=2
         )
 
+    def __repr__(self) -> str:
+        return f"Line({repr(self.point_A)}, {repr(self.point_B)})"
+
+    def __str__(self) -> str:
+        return f"Line between: ({str(self.point_A)}) and ({str(self.point_B)})"

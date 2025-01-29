@@ -22,14 +22,19 @@ def main():
     '''
 
     cell1 = Cell(win, 10, 10, 20, 20)
-    cell1.has_top_wall = False
     cell1.has_right_wall = False
-    cell2 = Cell(win, 10, 20, 20, 30)
+    cell1.has_left_wall = False
+
+    cell2 = Cell(win, 20, 10, 30, 20)
     cell2.has_left_wall = False
     cell2.has_bottom_wall = False
-    cell3 = Cell(win, 301, 302, 400, 400)
-    cell4 = Cell(win, 30, 40, 40, 50)
-    cell4.has_top_wall = False
+
+    cell3 = Cell(win, 20, 20, 30, 30)
+    cell3.has_top_wall = False
+    cell3.has_bottom_wall = False
+
+    cell4 = Cell(win, 20, 30, 30, 40)
+
     cell1.draw()
     cell2.draw()
     cell3.draw()

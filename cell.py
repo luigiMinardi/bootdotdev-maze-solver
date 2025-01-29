@@ -40,24 +40,23 @@ class Cell:
             self.__window.draw_line(top_wall)
 
         if self.has_bottom_wall:
-            bottom_left = Point(self.__bottom_right_x, self.__top_left_y)
+            bottom_left = Point(self.__top_left_x, self.__bottom_right_y)
             bottom_right = Point(self.__bottom_right_x, self.__bottom_right_y)
             bottom_wall = Line(bottom_left, bottom_right)
 
             self.__window.draw_line(bottom_wall)
 
         if self.has_left_wall:
-            left_top = Point(self.__top_left_x, self.__top_left_y)
-            left_bottom = Point(self.__top_left_x, self.__bottom_right_y)
-            left_wall = Line(left_top, left_bottom)
+            top_left = Point(self.__top_left_x, self.__top_left_y)
+            bottom_left = Point(self.__top_left_x, self.__bottom_right_y)
+            left_wall = Line(top_left, bottom_left)
 
             self.__window.draw_line(left_wall)
 
         if self.has_right_wall:
-            right_top = Point(self.__bottom_right_x, self.__top_left_x)
-            right_bottom = Point(self.__bottom_right_x, self.__bottom_right_y)
-            right_wall = Line(right_top, right_bottom)
+            top_right = Point(self.__bottom_right_x, self.__top_left_y)
+            bottom_right = Point(self.__bottom_right_x, self.__bottom_right_y)
+            right_wall = Line(top_right, bottom_right)
 
             self.__window.draw_line(right_wall)
-
 
