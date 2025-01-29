@@ -34,11 +34,15 @@ def main():
     cell3.has_bottom_wall = False
 
     cell4 = Cell(win, 20, 30, 30, 40)
+    cell4.has_top_wall = False
 
     cell1.draw()
     cell2.draw()
+    cell1.draw_move(cell2)
     cell3.draw()
+    cell2.draw_move(cell3, True)
     cell4.draw()
+    cell3.draw_move(cell4, True)
 
     win.wait_for_close()
 
