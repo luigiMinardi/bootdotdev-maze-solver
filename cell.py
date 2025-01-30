@@ -25,11 +25,11 @@ class Cell:
         self.has_top_wall = True
         self.has_bottom_wall = True
 
-        self.__top_left_x = top_left_x
-        self.__top_left_y = top_left_y
+        self._top_left_x = top_left_x
+        self._top_left_y = top_left_y
 
-        self.__bottom_right_x= bottom_right_x
-        self.__bottom_right_y = bottom_right_y
+        self._bottom_right_x= bottom_right_x
+        self._bottom_right_y = bottom_right_y
 
         self.__window = window
 
@@ -44,29 +44,29 @@ class Cell:
         """
 
         if self.has_top_wall:
-            top_left = Point(self.__top_left_x, self.__top_left_y)
-            top_right = Point(self.__bottom_right_x, self.__top_left_y)
+            top_left = Point(self._top_left_x, self._top_left_y)
+            top_right = Point(self._bottom_right_x, self._top_left_y)
             top_wall = Line(top_left, top_right)
 
             self.__window.draw_line(top_wall, colors.setdefault("top","#232136"))
 
         if self.has_bottom_wall:
-            bottom_left = Point(self.__top_left_x, self.__bottom_right_y)
-            bottom_right = Point(self.__bottom_right_x, self.__bottom_right_y)
+            bottom_left = Point(self._top_left_x, self._bottom_right_y)
+            bottom_right = Point(self._bottom_right_x, self._bottom_right_y)
             bottom_wall = Line(bottom_left, bottom_right)
 
             self.__window.draw_line(bottom_wall, colors.setdefault("bottom","#232136"))
 
         if self.has_left_wall:
-            top_left = Point(self.__top_left_x, self.__top_left_y)
-            bottom_left = Point(self.__top_left_x, self.__bottom_right_y)
+            top_left = Point(self._top_left_x, self._top_left_y)
+            bottom_left = Point(self._top_left_x, self._bottom_right_y)
             left_wall = Line(top_left, bottom_left)
 
             self.__window.draw_line(left_wall, colors.setdefault("left","#232136"))
 
         if self.has_right_wall:
-            top_right = Point(self.__bottom_right_x, self.__top_left_y)
-            bottom_right = Point(self.__bottom_right_x, self.__bottom_right_y)
+            top_right = Point(self._bottom_right_x, self._top_left_y)
+            bottom_right = Point(self._bottom_right_x, self._bottom_right_y)
             right_wall = Line(top_right, bottom_right)
 
             self.__window.draw_line(right_wall, colors.setdefault("right","#232136"))
@@ -76,7 +76,7 @@ class Cell:
         """
         return the (x, y) position of the center of a Cell
         """
-        return ((self.__top_left_x + self.__bottom_right_x) / 2, (self.__top_left_y + self.__bottom_right_y) / 2)
+        return ((self._top_left_x + self._bottom_right_x) / 2, (self._top_left_y + self._bottom_right_y) / 2)
 
 
     def draw_move(self, to_cell: Self, undo: bool = False) -> None:
@@ -101,3 +101,10 @@ class Cell:
         self.__window.draw_line(movement, fill_color)
 
 
+    def __repr__(self) -> str:
+        return self.__str__()
+        #return f"Cell({repr(self.__window)}, {self._top_left_x}, {self._top_left_y}, {self._bottom_right_x}, {self._bottom_right_y})"
+
+    def __str__(self) -> str:
+        return f"(Cell at {self._top_left_x} {self._top_left_y} to {self._bottom_right_x} {self._bottom_right_y})"
+        #return f"Cell FROM {self._top_left_x}, {self._top_left_y} TO {self._bottom_right_x}, {self._bottom_right_y} WITH top {self.has_top_wall}, bottom {self.has_bottom_wall}, left {self.has_left_wall}, right {self.has_right_wall}"
