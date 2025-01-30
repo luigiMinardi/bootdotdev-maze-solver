@@ -10,7 +10,7 @@ def main():
     x=0 is the left of the screen.
     y=0 is the top of the screen.
     """
-    win = Window(800, 600, "Beautiful window")
+    win = Window(800, 800, "Beautiful window")
     '''
     point_A = Point(10,100)
     point_B = Point(100,10)
@@ -20,7 +20,6 @@ def main():
     line2 = Line(point_C, point_D)
     win.draw_line(line, "#232136")
     win.draw_line(line2, "#232136")
-    '''
 
     cell1 = Cell(win, 10, 10, 20, 20)
     cell1.has_right_wall = False
@@ -44,8 +43,9 @@ def main():
     cell2.draw_move(cell3, True)
     cell4.draw()
     cell3.draw_move(cell4, True)
+    '''
 
-    maze = Maze(win, 3, 3, 10, 10, 10,10)
+    maze = Maze(win, 25, 25, 10, 10, 30, 30)
     win.wait_for_close()
 
 
