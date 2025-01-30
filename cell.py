@@ -1,4 +1,4 @@
-from typing import Self, TypedDict
+from typing import Literal, Self, TypedDict
 from window import Window
 from line import Line
 from point import Point
@@ -18,7 +18,14 @@ class Cell:
     x=0 is the left of the screen.
     y=0 is the top of the screen.
     """
-    def __init__(self, window: Window, top_left_x:int , top_left_y: int, bottom_right_x:int , bottom_right_y: int) -> None:
+    def __init__(
+            self,
+            top_left_x:int,
+            top_left_y: int,
+            bottom_right_x:int,
+            bottom_right_y: int,
+            window: Window | None
+        ) -> None:
         self.has_left_wall = True
         self.has_right_wall = True
 
@@ -34,7 +41,7 @@ class Cell:
         self.__window = window
 
 
-    def draw(self, colors: TWallColors = {}) -> None:
+    def draw(self, colors: TWallColors = {}) -> tuple[Line | None, TWallColors] | None:
         """
         Draw itself and its walls on the screen based on the coordinates
         set on init and its 4 "has_<positon>_wall" booleans.
@@ -48,13 +55,18 @@ class Cell:
             top_right = Point(self._bottom_right_x, self._top_left_y)
             top_wall = Line(top_left, top_right)
 
+            if not self.__window:
+                return top_wall, colors
             self.__window.draw_line(top_wall, colors.setdefault("top","#232136"))
+
 
         if self.has_bottom_wall:
             bottom_left = Point(self._top_left_x, self._bottom_right_y)
             bottom_right = Point(self._bottom_right_x, self._bottom_right_y)
             bottom_wall = Line(bottom_left, bottom_right)
 
+            if not self.__window:
+                return bottom_wall, colors
             self.__window.draw_line(bottom_wall, colors.setdefault("bottom","#232136"))
 
         if self.has_left_wall:
@@ -62,6 +74,8 @@ class Cell:
             bottom_left = Point(self._top_left_x, self._bottom_right_y)
             left_wall = Line(top_left, bottom_left)
 
+            if not self.__window:
+                return left_wall, colors
             self.__window.draw_line(left_wall, colors.setdefault("left","#232136"))
 
         if self.has_right_wall:
@@ -69,7 +83,11 @@ class Cell:
             bottom_right = Point(self._bottom_right_x, self._bottom_right_y)
             right_wall = Line(top_right, bottom_right)
 
+            if not self.__window:
+                return right_wall, colors
             self.__window.draw_line(right_wall, colors.setdefault("right","#232136"))
+
+        return None, colors
 
 
     def get_center(self) -> tuple[float, float]:
@@ -79,7 +97,7 @@ class Cell:
         return ((self._top_left_x + self._bottom_right_x) / 2, (self._top_left_y + self._bottom_right_y) / 2)
 
 
-    def draw_move(self, to_cell: Self, undo: bool = False) -> None:
+    def draw_move(self, to_cell: Self, undo: bool = False) -> tuple[Line, Literal['gray', 'red'], bool] | None:
         """
         Draw a line between the center of two Cells.
         The line is RED if doing GRAY if undoing.
@@ -98,12 +116,14 @@ class Cell:
         to_center = Point(to_center_x, to_center_y)
         movement = Line(my_center, to_center)
 
+        if not self.__window:
+            return movement, fill_color, undo
         self.__window.draw_line(movement, fill_color)
 
 
     def __repr__(self) -> str:
-        return self.__str__()
-        #return f"Cell({repr(self.__window)}, {self._top_left_x}, {self._top_left_y}, {self._bottom_right_x}, {self._bottom_right_y})"
+        #return self.__str__()
+        return f"Cell({repr(self.__window)}, {self._top_left_x}, {self._top_left_y}, {self._bottom_right_x}, {self._bottom_right_y})"
 
     def __str__(self) -> str:
         return f"(Cell at {self._top_left_x} {self._top_left_y} to {self._bottom_right_x} {self._bottom_right_y})"

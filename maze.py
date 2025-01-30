@@ -18,13 +18,13 @@ class Maze:
     """
     def __init__(
             self,
-            window: Window,
             num_rows: int,
             num_cols: int,
             padding_x: int,
             padding_y: int,
             cell_size_x: int,
-            cell_size_y: int
+            cell_size_y: int,
+            window: Window | None = None,
         ) -> None:
         self.window = window
 
