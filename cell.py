@@ -1,4 +1,5 @@
 from typing import Literal, Self, TypedDict
+from utils import BACKGROUND_COLOR, LINE_COLOR
 from window import Window
 from line import Line
 from point import Point
@@ -41,7 +42,7 @@ class Cell:
         self.__window = window
 
 
-    def draw(self, colors: TWallColors = {}) -> tuple[Line | None, TWallColors] | None:
+    def draw(self, colors: TWallColors = {}) -> tuple[None, TWallColors]:
         """
         Draw itself and its walls on the screen based on the coordinates
         set on init and its 4 "has_<positon>_wall" booleans.
@@ -51,41 +52,49 @@ class Cell:
         """
 
         if self.has_top_wall:
+            colors["top"] = colors.setdefault("top", LINE_COLOR)
+        else:
+            colors["top"] = colors.setdefault("top", BACKGROUND_COLOR)
+
+        if self.has_bottom_wall:
+            colors["bottom"] = colors.setdefault("bottom",LINE_COLOR)
+        else:
+            colors["bottom"] = colors.setdefault("bottom",BACKGROUND_COLOR)
+
+        if self.has_left_wall:
+            colors["left"] = colors.setdefault("left",LINE_COLOR)
+        else:
+            colors["left"] = colors.setdefault("left",BACKGROUND_COLOR)
+
+        if self.has_right_wall:
+            colors["right"] = colors.setdefault("right",LINE_COLOR)
+        else:
+            colors["right"] = colors.setdefault("right", BACKGROUND_COLOR)
+
+        if self.__window:
             top_left = Point(self._top_left_x, self._top_left_y)
             top_right = Point(self._bottom_right_x, self._top_left_y)
             top_wall = Line(top_left, top_right)
 
-            if not self.__window:
-                return top_wall, colors
-            self.__window.draw_line(top_wall, colors.setdefault("top","#232136"))
+            self.__window.draw_line(top_wall, colors["top"])
 
-
-        if self.has_bottom_wall:
             bottom_left = Point(self._top_left_x, self._bottom_right_y)
             bottom_right = Point(self._bottom_right_x, self._bottom_right_y)
             bottom_wall = Line(bottom_left, bottom_right)
 
-            if not self.__window:
-                return bottom_wall, colors
-            self.__window.draw_line(bottom_wall, colors.setdefault("bottom","#232136"))
+            self.__window.draw_line(bottom_wall, colors["bottom"])
 
-        if self.has_left_wall:
             top_left = Point(self._top_left_x, self._top_left_y)
             bottom_left = Point(self._top_left_x, self._bottom_right_y)
             left_wall = Line(top_left, bottom_left)
 
-            if not self.__window:
-                return left_wall, colors
-            self.__window.draw_line(left_wall, colors.setdefault("left","#232136"))
+            self.__window.draw_line(left_wall, colors["left"])
 
-        if self.has_right_wall:
             top_right = Point(self._bottom_right_x, self._top_left_y)
             bottom_right = Point(self._bottom_right_x, self._bottom_right_y)
             right_wall = Line(top_right, bottom_right)
 
-            if not self.__window:
-                return right_wall, colors
-            self.__window.draw_line(right_wall, colors.setdefault("right","#232136"))
+            self.__window.draw_line(right_wall, colors["right"])
 
         return None, colors
 

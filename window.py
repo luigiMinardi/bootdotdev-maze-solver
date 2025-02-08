@@ -2,6 +2,7 @@ from tkinter import Tk, BOTH, Canvas
 
 from line import Line
 
+from utils import BACKGROUND_COLOR, LINE_COLOR
 
 class Window:
     """
@@ -13,7 +14,7 @@ class Window:
         self.__root.title(title)
         self.__root.protocol("WM_DELETE_WINDOW", self.close)
 
-        self.__canvas = Canvas(self.__root, bg="#403d52", width=width, height=height)
+        self.__canvas = Canvas(self.__root, bg=BACKGROUND_COLOR, width=width, height=height)
         self.__canvas.pack()
 
         self.__is_window_running = False
@@ -45,7 +46,7 @@ class Window:
         self.__is_window_running = False
 
 
-    def draw_line(self, line: Line, fill_color: str = "#232136") -> None:
+    def draw_line(self, line: Line, fill_color: str = LINE_COLOR) -> None:
         """
         Draw a line between two Point's in a Canvas.
 
