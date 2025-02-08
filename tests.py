@@ -22,16 +22,27 @@ class Test(unittest.TestCase):
         print(m1._cells[1][0])
         print(m2._cells[0][0])
         print(m2._cells[1][0])
-        # Assert colums are being created correctly
-        self.assertEqual(len(m1._cells),num_cols)
-        self.assertEqual(len(m1._cells[0]), num_rows)
 
-        self.assertEqual(len(m2._cells),num_cols_2)
-        self.assertEqual(len(m2._cells[0]), num_rows_2)
+        # Assert colums are being created correctly
+        self.assertEqual(len(m1._cells), num_rows)
+        self.assertEqual(len(m1._cells[0]), num_cols)
+
+        self.assertEqual(len(m2._cells), num_rows_2)
+        self.assertEqual(len(m2._cells[0]), num_cols_2)
 
         # Assert cells placement are correct
+        self.assertEqual(m1._cells[0][0]._top_left_y + cell_size_y, m1._cells[1][0]._top_left_y)
+        self.assertEqual(m1._cells[0][0]._bottom_right_y + cell_size_y, m1._cells[1][0]._bottom_right_y)
+
         self.assertEqual(m2._cells[0][0]._top_left_y + cell_size_y_2, m2._cells[1][0]._top_left_y)
         self.assertEqual(m2._cells[0][0]._bottom_right_y + cell_size_y_2, m2._cells[1][0]._bottom_right_y)
+
+        # Assert first and last cells have their entrance and exit done correctly
+        self.assertEqual(m1._cells[0][0].has_top_wall, False)
+        self.assertEqual(m1._cells[num_rows -1][num_cols -1].has_bottom_wall, False)
+
+        self.assertEqual(m2._cells[0][0].has_top_wall, False)
+        self.assertEqual(m2._cells[num_rows_2 -1][num_cols_2 -1].has_bottom_wall, False)
 
 if __name__ == "__main__":
     unittest.main()

@@ -5,7 +5,7 @@ from window import Window
 
 class Maze:
     """
-    num_rows, num_cols (int): Number of rows and collumns on the Maze Matrix representation
+    num_rows, num_cols (int): Number of rows and collumns on the Maze Matrix
     padding_x, padding_y (int): Distance in pixels that the Maze has from the Window
     cell_size_x, cell_size_y (int): Size that one Cell will have in pixels
         so if a Cell has 10 of size it means that it will have
@@ -38,6 +38,7 @@ class Maze:
         self.cell_size_y = cell_size_y
 
         self._create_cells()
+        self._break_entrance_and_exit()
 
 
     def _create_cells(self) -> None:
@@ -57,11 +58,11 @@ class Maze:
         self._cells: list[list[Cell]] = []
 
         first_row = True
-        for row in range(self.num_cols):
+        for row in range(self.num_rows):
             self._cells.append([])
 
             first_col = True
-            for col in range(self.num_rows):
+            for col in range(self.num_cols):
                 if first_row == True:
                     first_row = False
                     first_col = False
@@ -96,14 +97,20 @@ class Maze:
             self._draw_cell()
 
 
-    def _draw_cell(self) -> None:
+    def _break_entrance_and_exit(self) -> None:
+        self._cells[0][0].has_top_wall = False
+        self._cells[self.num_rows -1][self.num_cols -1].has_bottom_wall = False
+        if self.window:
+            self._draw_cell(0.0)
+
+
+    def _draw_cell(self, animation_delay: float = 0.01) -> None:
         for row in self._cells:
             for cell in row:
                 cell.draw()
-                self._animate()
+                self._animate(animation_delay)
     
-    def _animate(self) -> None:
+    def _animate(self, animation_delay: float = 0.01) -> None:
         if self.window:
             self.window.redraw()
-        self.animation_delay: float = 0.01
-        time.sleep(self.animation_delay)
+        time.sleep(animation_delay)
