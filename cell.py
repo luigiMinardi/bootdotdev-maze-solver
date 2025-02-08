@@ -42,7 +42,7 @@ class Cell:
         self.__window = window
 
 
-    def draw(self, colors: TWallColors = {}) -> tuple[None, TWallColors]:
+    def draw(self, colors: TWallColors | None = None) -> tuple[None, TWallColors]:
         """
         Draw itself and its walls on the screen based on the coordinates
         set on init and its 4 "has_<positon>_wall" booleans.
@@ -51,52 +51,53 @@ class Cell:
         colors(TWallColors): Optional dict with the <position> and <TKColor> as key values.
         """
 
+        draw_colors: TWallColors = colors if colors else {}
         if self.has_top_wall:
-            colors["top"] = colors.setdefault("top", LINE_COLOR)
+            draw_colors["top"] = draw_colors.setdefault("top", LINE_COLOR)
         else:
-            colors["top"] = colors.setdefault("top", BACKGROUND_COLOR)
+            draw_colors["top"] = draw_colors.setdefault("top", BACKGROUND_COLOR)
 
         if self.has_bottom_wall:
-            colors["bottom"] = colors.setdefault("bottom",LINE_COLOR)
+            draw_colors["bottom"] = draw_colors.setdefault("bottom",LINE_COLOR)
         else:
-            colors["bottom"] = colors.setdefault("bottom",BACKGROUND_COLOR)
+            draw_colors["bottom"] = draw_colors.setdefault("bottom",BACKGROUND_COLOR)
 
         if self.has_left_wall:
-            colors["left"] = colors.setdefault("left",LINE_COLOR)
+            draw_colors["left"] = draw_colors.setdefault("left",LINE_COLOR)
         else:
-            colors["left"] = colors.setdefault("left",BACKGROUND_COLOR)
+            draw_colors["left"] = draw_colors.setdefault("left",BACKGROUND_COLOR)
 
         if self.has_right_wall:
-            colors["right"] = colors.setdefault("right",LINE_COLOR)
+            draw_colors["right"] = draw_colors.setdefault("right",LINE_COLOR)
         else:
-            colors["right"] = colors.setdefault("right", BACKGROUND_COLOR)
+            draw_colors["right"] = draw_colors.setdefault("right", BACKGROUND_COLOR)
 
         if self.__window:
             top_left = Point(self._top_left_x, self._top_left_y)
             top_right = Point(self._bottom_right_x, self._top_left_y)
             top_wall = Line(top_left, top_right)
 
-            self.__window.draw_line(top_wall, colors["top"])
+            self.__window.draw_line(top_wall, draw_colors["top"])
 
             bottom_left = Point(self._top_left_x, self._bottom_right_y)
             bottom_right = Point(self._bottom_right_x, self._bottom_right_y)
             bottom_wall = Line(bottom_left, bottom_right)
 
-            self.__window.draw_line(bottom_wall, colors["bottom"])
+            self.__window.draw_line(bottom_wall, draw_colors["bottom"])
 
             top_left = Point(self._top_left_x, self._top_left_y)
             bottom_left = Point(self._top_left_x, self._bottom_right_y)
             left_wall = Line(top_left, bottom_left)
 
-            self.__window.draw_line(left_wall, colors["left"])
+            self.__window.draw_line(left_wall, draw_colors["left"])
 
             top_right = Point(self._bottom_right_x, self._top_left_y)
             bottom_right = Point(self._bottom_right_x, self._bottom_right_y)
             right_wall = Line(top_right, bottom_right)
 
-            self.__window.draw_line(right_wall, colors["right"])
+            self.__window.draw_line(right_wall, draw_colors["right"])
 
-        return None, colors
+        return None, draw_colors
 
 
     def get_center(self) -> tuple[float, float]:
@@ -131,9 +132,8 @@ class Cell:
 
 
     def __repr__(self) -> str:
-        #return self.__str__()
-        return f"Cell({repr(self.__window)}, {self._top_left_x}, {self._top_left_y}, {self._bottom_right_x}, {self._bottom_right_y})"
+        return f"Cell({self._top_left_x}, {self._top_left_y}, {self._bottom_right_x}, {self._bottom_right_y}, {repr(self.__window)})"
 
     def __str__(self) -> str:
-        return f"(Cell at {self._top_left_x} {self._top_left_y} to {self._bottom_right_x} {self._bottom_right_y})"
-        #return f"Cell FROM {self._top_left_x}, {self._top_left_y} TO {self._bottom_right_x}, {self._bottom_right_y} WITH top {self.has_top_wall}, bottom {self.has_bottom_wall}, left {self.has_left_wall}, right {self.has_right_wall}"
+        #return f"(Cell at {self._top_left_x} {self._top_left_y} to {self._bottom_right_x} {self._bottom_right_y})"
+        return f"Cell FROM {self._top_left_x}, {self._top_left_y} TO {self._bottom_right_x}, {self._bottom_right_y} WITH top {self.has_top_wall}, bottom {self.has_bottom_wall}, left {self.has_left_wall}, right {self.has_right_wall}"
