@@ -12,8 +12,8 @@ class TWallColors(TypedDict, total = False):
 
 class Cell:
     """
-    window: The Window that the Cell should be draw.
-    top_left_x, top_left_y, bottom_right_x, bottom_right_y: X, Y positon of the Cell.
+    top_left_x, top_left_y, bottom_right_x, bottom_right_y (int): X, Y positon of the Cell.
+    window (Window | None): The Window that the Cell should be draw.
 
     x=0 is the left of the screen.
     y=0 is the top of the screen.

@@ -5,12 +5,12 @@ from window import Window
 
 class Maze:
     """
-    window (Window): Window in which the maze should be draw
     num_rows, num_cols (int): Number of rows and collumns on the Maze Matrix representation
     padding_x, padding_y (int): Distance in pixels that the Maze has from the Window
-    cell_size_x, cell_size_y: Size that one Cell will have in pixels
+    cell_size_x, cell_size_y (int): Size that one Cell will have in pixels
         so if a Cell has 10 of size it means that it will have
         padding_x + cell_size_x then padding_y + cell_size_y.
+    window (Window | None): Window in which the maze should be draw
 
     1st Cell top_left_x, top_left_y are the padding_x and padding_y then
     cell_size_<x/y> is the equivalent of bottom_right_x, bottom_right_y Cell position
@@ -54,54 +54,56 @@ class Maze:
         # TODO: Refactor this method to be more easy to understand
         # if possible faster too.
 
-        self.__cells: list[list[Cell]] = []
+        self._cells: list[list[Cell]] = []
 
         first_row = True
         for row in range(self.num_cols):
-            self.__cells.append([])
+            self._cells.append([])
 
             first_col = True
             for col in range(self.num_rows):
                 if first_row == True:
                     first_row = False
                     first_col = False
-                    self.__cells[row].append(Cell(
-                        self.window,
+                    self._cells[row].append(Cell(
                         self.padding_x,
                         self.padding_y,
                         self.padding_x + self.cell_size_x,
-                        self.padding_y + self.cell_size_y
+                        self.padding_y + self.cell_size_y,
+                        self.window
                     ))
                     continue
 
                 if first_col == True:
                     first_col = False
-                    self.__cells[row].append(Cell(
-                        self.window,
+                    self._cells[row].append(Cell(
                         self.padding_x,
-                        self.__cells[row-1][0]._top_left_y + self.cell_size_y,
+                        self._cells[row-1][0]._top_left_y + self.cell_size_y,
                         self.padding_x + self.cell_size_x,
-                        self.__cells[row-1][0]._bottom_right_y + self.cell_size_y
+                        self._cells[row-1][0]._bottom_right_y + self.cell_size_y,
+                        self.window
                     ))
                     continue
 
-                self.__cells[row].append(Cell(
-                    self.window,
-                    self.__cells[row][col-1]._top_left_x + self.cell_size_x,
-                    self.__cells[row][col-1]._top_left_y,
-                    self.__cells[row][col-1]._bottom_right_x + self.cell_size_x,
-                    self.__cells[row][col-1]._bottom_right_y
+                self._cells[row].append(Cell(
+                    self._cells[row][col-1]._top_left_x + self.cell_size_x,
+                    self._cells[row][col-1]._top_left_y,
+                    self._cells[row][col-1]._bottom_right_x + self.cell_size_x,
+                    self._cells[row][col-1]._bottom_right_y,
+                    self.window
                 ))
-        self._draw_cell()
+        if self.window:
+            self._draw_cell()
 
 
     def _draw_cell(self) -> None:
-        for row in self.__cells:
+        for row in self._cells:
             for cell in row:
                 cell.draw()
                 self._animate()
     
     def _animate(self) -> None:
-        self.window.redraw()
+        if self.window:
+            self.window.redraw()
         self.animation_delay: float = 0.01
         time.sleep(self.animation_delay)
