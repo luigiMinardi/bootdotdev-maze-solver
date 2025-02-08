@@ -1,7 +1,7 @@
 import time
 from cell import Cell
 from window import Window
-
+import random
 
 class Maze:
     """
@@ -15,6 +15,8 @@ class Maze:
     1st Cell top_left_x, top_left_y are the padding_x and padding_y then
     cell_size_<x/y> is the equivalent of bottom_right_x, bottom_right_y Cell position
     next Cell calculate its position based on the previous one.
+
+    If you want a specific maze you can set its seed variable to some int and call update_seed().
     """
     def __init__(
             self,
@@ -25,20 +27,37 @@ class Maze:
             cell_size_x: int,
             cell_size_y: int,
             window: Window | None = None,
+            seed: int | None = None,
+            animation_delay: float = 0.01
         ) -> None:
-        self.window = window
+        self.window: Window | None = window
 
-        self.num_rows = num_rows
-        self.num_cols = num_cols
+        self.num_rows: int = num_rows
+        self.num_cols: int = num_cols
 
-        self.padding_x = padding_x
-        self.padding_y = padding_y
+        self.padding_x: int = padding_x
+        self.padding_y: int = padding_y
 
-        self.cell_size_x = cell_size_x
-        self.cell_size_y = cell_size_y
+        self.cell_size_x: int = cell_size_x
+        self.cell_size_y: int = cell_size_y
+
+        self.animation_delay: float = animation_delay
+
+        self.seed: int | None = seed
+        self.update_seed()
 
         self._create_cells()
         self._break_entrance_and_exit()
+        self._break_walls_r()
+
+    def update_seed(self, seed: int | None = None)-> None:
+        """
+        Updates radom.seed() based on self.seed, optionally you can pass a seed
+        in this method, which will update both self.seed and random.seed() to
+        the given seed.
+        """
+        self.seed = seed if seed else self.seed
+        random.seed(self.seed)
 
 
     def _create_cells(self) -> None:
@@ -94,7 +113,7 @@ class Maze:
                     self.window
                 ))
         if self.window:
-            self._draw_cell()
+            self._draw_cell(self.animation_delay)
 
 
     def _break_entrance_and_exit(self) -> None:
@@ -104,13 +123,43 @@ class Maze:
             self._draw_cell(0.0)
 
 
-    def _draw_cell(self, animation_delay: float = 0.01) -> None:
+    def _break_walls_r(self, row: int = 0, col: int = 0) -> None:
+        """
+        Starts at 0,0 and break walls using a depth-first traversal recursive
+        technique to create a random maze.
+        """
+        self._cells[row][col].visited = True
+        while True:
+            to_visit: list[tuple[int,int]] = []
+            # we dont need to look above (top) and behind (left) cuz we always 
+            # start on 0,0 so we check only in front (right) and bellow (bottom)
+            if col + 1 < self.num_cols: # right
+                if not self._cells[row][col +1].visited:
+                    to_visit.append((row, col +1))
+            if row + 1 < self.num_rows: # bottom
+                if not self._cells[row + 1][col].visited:
+                    to_visit.append((row+1, col))
+            if len(to_visit) <= 0:
+                self._cells[row][col].draw()
+                return
+            row_cell, col_cell = random.choice(to_visit)
+            if col_cell > col: # moved right
+                self._cells[row][col].has_right_wall = False
+                self._cells[row_cell][col_cell].has_left_wall = False
+            if row_cell > row: # moved bottom
+                self._cells[row][col].has_bottom_wall = False
+                self._cells[row_cell][col_cell].has_top_wall = False
+            self._break_walls_r(row_cell, col_cell)
+
+
+    def _draw_cell(self, animation_delay: float) -> None:
         for row in self._cells:
             for cell in row:
                 cell.draw()
                 self._animate(animation_delay)
     
-    def _animate(self, animation_delay: float = 0.01) -> None:
+    def _animate(self, animation_delay: float) -> None:
         if self.window:
             self.window.redraw()
         time.sleep(animation_delay)
+

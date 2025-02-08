@@ -41,6 +41,8 @@ class Cell:
 
         self.__window = window
 
+        self.visited = False
+
 
     def draw(self, colors: TWallColors | None = None) -> tuple[None, TWallColors]:
         """
