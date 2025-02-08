@@ -127,28 +127,47 @@ class Maze:
         """
         Starts at 0,0 and break walls using a depth-first traversal recursive
         technique to create a random maze.
+
+        self.seed affects the randomness of the maze.
         """
         self._cells[row][col].visited = True
         while True:
             to_visit: list[tuple[int,int]] = []
-            # we dont need to look above (top) and behind (left) cuz we always 
-            # start on 0,0 so we check only in front (right) and bellow (bottom)
-            if col + 1 < self.num_cols: # right
-                if not self._cells[row][col +1].visited:
-                    to_visit.append((row, col +1))
+            if row - 1 >= 0: # top
+                if not self._cells[row - 1][col].visited:
+                    to_visit.append((row -1, col))
             if row + 1 < self.num_rows: # bottom
                 if not self._cells[row + 1][col].visited:
                     to_visit.append((row+1, col))
+
+            if col - 1 >= 0: # left
+                if not self._cells[row][col - 1].visited:
+                    to_visit.append((row, col-1))
+            if col + 1 < self.num_cols: # right
+                if not self._cells[row][col +1].visited:
+                    to_visit.append((row, col +1))
+
             if len(to_visit) <= 0:
                 self._cells[row][col].draw()
                 return
+
             row_cell, col_cell = random.choice(to_visit)
-            if col_cell > col: # moved right
-                self._cells[row][col].has_right_wall = False
-                self._cells[row_cell][col_cell].has_left_wall = False
-            if row_cell > row: # moved bottom
+            if row_cell < row and col_cell == col: # moved top
+                self._cells[row][col].has_top_wall = False
+                self._cells[row_cell][col_cell].has_bottom_wall = False
+
+            if row_cell > row and col_cell == col: # moved bottom
                 self._cells[row][col].has_bottom_wall = False
                 self._cells[row_cell][col_cell].has_top_wall = False
+
+            if row_cell == row and col_cell < col: # moved left
+                self._cells[row][col].has_left_wall = False
+                self._cells[row_cell][col_cell].has_right_wall = False
+
+            if row_cell == row and col_cell > col: # moved right
+                self._cells[row][col].has_right_wall = False
+                self._cells[row_cell][col_cell].has_left_wall = False
+
             self._break_walls_r(row_cell, col_cell)
 
 
@@ -159,6 +178,10 @@ class Maze:
                 self._animate(animation_delay)
     
     def _animate(self, animation_delay: float) -> None:
+        """
+        Adds a delay into the maze drawing, pass self.animation_delay in case
+        you want the default delay instead of passing a custom one.
+        """
         if self.window:
             self.window.redraw()
         time.sleep(animation_delay)

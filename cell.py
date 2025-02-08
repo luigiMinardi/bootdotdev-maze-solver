@@ -41,6 +41,8 @@ class Cell:
 
         self.__window = window
 
+        self.colors: TWallColors = {}
+
         self.visited = False
 
 
@@ -53,7 +55,8 @@ class Cell:
         colors(TWallColors): Optional dict with the <position> and <TKColor> as key values.
         """
 
-        draw_colors: TWallColors = colors if colors else {}
+        custom_colors: TWallColors = colors if colors else self.colors
+        draw_colors: TWallColors = custom_colors if custom_colors else {}
         if self.has_top_wall:
             draw_colors["top"] = draw_colors.setdefault("top", LINE_COLOR)
         else:
