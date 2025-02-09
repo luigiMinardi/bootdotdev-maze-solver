@@ -169,7 +169,7 @@ class Maze:
                     self.window
                 ))
         if self.window:
-            self._draw_cell(self.animation_delay)
+            self._draw_cell(0.0)
 
 
     def _break_entrance_and_exit(self) -> None:
