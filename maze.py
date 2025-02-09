@@ -61,6 +61,61 @@ class Maze:
         random.seed(self.seed)
 
 
+    def solve(self) -> bool:
+        return self._solve_r(0,0)
+
+
+    def _solve_r(self, row: int, col: int) -> bool:
+        self._animate(self.animation_delay)
+        self._cells[row][col].visited = True
+
+        if self._cells[row][col] == self._cells[self.num_rows -1][self.num_cols -1]:
+            return True
+
+        if not self._cells[row][col].has_top_wall:
+            if row - 1 >= 0: # top
+                if not self._cells[row - 1][col].has_bottom_wall and not self._cells[row - 1][col].visited:
+                    self._cells[row][col].draw_move(self._cells[row - 1][col])
+                    is_right_path = self._solve_r(row -1, col)
+                    if is_right_path:
+                        return True
+                    self._cells[row][col].draw_move(self._cells[row - 1][col], True)
+
+        if not self._cells[row][col].has_bottom_wall:
+            if row + 1 < self.num_rows: # bottom
+                if not self._cells[row + 1][col].has_top_wall and not self._cells[row + 1][col].visited:
+
+                    self._cells[row][col].draw_move(self._cells[row + 1][col])
+                    is_right_path = self._solve_r(row + 1, col)
+                    if is_right_path:
+                        return True
+                    self._cells[row][col].draw_move(self._cells[row + 1][col], True)
+
+
+        if not self._cells[row][col].has_left_wall:
+            if col - 1 >= 0: # left
+                if not self._cells[row][col - 1].has_right_wall and not self._cells[row][col - 1].visited:
+
+                    self._cells[row][col].draw_move(self._cells[row][col - 1])
+                    is_right_path = self._solve_r(row, col - 1)
+                    if is_right_path:
+                        return True
+                    self._cells[row][col].draw_move(self._cells[row][col - 1], True)
+
+        if not self._cells[row][col].has_right_wall:
+            if col + 1 < self.num_cols: # right
+                if not self._cells[row][col + 1].has_left_wall and not self._cells[row][col + 1].visited:
+
+                    self._cells[row][col].draw_move(self._cells[row][col + 1])
+                    is_right_path = self._solve_r(row, col + 1)
+                    if is_right_path:
+                        return True
+                    self._cells[row][col].draw_move(self._cells[row][col + 1], True)
+
+        return False
+
+
+
     def _create_cells(self) -> None:
         """
         Create a matrix with Cells to draw the maze
