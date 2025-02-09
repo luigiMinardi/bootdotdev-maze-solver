@@ -10,14 +10,17 @@ After being on the project directory
 ```sh
 python -m venv .venv
 ```
-Unix-like
-```sh
-source .venv/bin/activate
-```
-Windows
-```cmd
-.venv\Scripts\activate.bat
-```
+Start the `venv`
+> Unix-like
+> ```sh
+> source .venv/bin/activate
+> ```
+
+> Windows
+> ```cmd
+> .venv\Scripts\activate.bat
+> ```
+Run the code
 ```sh
 python main.py
 ```
