@@ -21,7 +21,7 @@ class Test(unittest.TestCase):
         print(m1._cells[0][0])
         print(m1._cells[1][0])
         print(m2._cells[0][0])
-        print(m2._cells[1][0])
+        print(m2._cells[1][0].visited)
 
         # Assert colums are being created correctly
         self.assertEqual(len(m1._cells), num_rows)
@@ -43,6 +43,11 @@ class Test(unittest.TestCase):
 
         self.assertEqual(m2._cells[0][0].has_top_wall, False)
         self.assertEqual(m2._cells[num_rows_2 -1][num_cols_2 -1].has_bottom_wall, False)
+
+        # Assert cells visited propperty are false
+        self.assertEqual(m1._cells[0][0].visited, False)
+        self.assertEqual(m1._cells[num_rows //2][num_cols//2].visited, False)
+        self.assertEqual(m1._cells[num_rows -1][num_cols -1].visited, False)
 
 if __name__ == "__main__":
     unittest.main()

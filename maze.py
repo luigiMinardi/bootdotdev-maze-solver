@@ -49,6 +49,7 @@ class Maze:
         self._create_cells()
         self._break_entrance_and_exit()
         self._break_walls_r()
+        self._reset_cells_visited()
 
     def update_seed(self, seed: int | None = None)-> None:
         """
@@ -169,6 +170,15 @@ class Maze:
                 self._cells[row_cell][col_cell].has_left_wall = False
 
             self._break_walls_r(row_cell, col_cell)
+
+
+    def _reset_cells_visited(self) -> None:
+        """
+        Make all _cells.visited = False
+        """
+        for row in self._cells:
+            for col in row:
+                col.visited = False
 
 
     def _draw_cell(self, animation_delay: float) -> None:
